@@ -5,10 +5,15 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'landing-page',
+    //   component: require('@/components/LandingPage').default
+    // },
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      name: 'file-editor',
+      component: require('@/components/FileEditor/FileEditor').default
     },
     {
       path: '*',
