@@ -3,7 +3,7 @@
         <div class="button-row">
             <div class="left">
                 <button @click="openFile"><font-awesome-icon icon="folder-open"></font-awesome-icon> Open File</button>
-                <button ><font-awesome-icon icon="save"></font-awesome-icon> Save File</button>
+                <button @click="saveFile"><font-awesome-icon icon="save"></font-awesome-icon> Save File</button>
             </div>
             <div class="right">
                 <button @click="decryptText"><font-awesome-icon icon="unlock-alt"></font-awesome-icon> Decrypt Text</button>
@@ -18,25 +18,30 @@
 
 <script>
     import fs from 'fs';
-    const { dialog } = require('electron').remote;
+    import path from 'path';
+    const electronRemote = require('electron').remote;
+    const dialog = electronRemote.dialog;
     import { Obfuscator } from '../../../services/Obfuscator';
 
     export default {
         name: 'file-editor',
         data: function() {
             return {
-                fileText: ''
+                fileText: '',
+                fileName: 'new.txt',
+                lastSelectedFolder: ''
             };
         },
         methods: {
-            openFile () {
+            openFile() {
                 dialog.showOpenDialog((fileNames) => {
                     if(fileNames === undefined) {
                         console.log("no file selected");
                         return;
                     }
 
-                    var selectedFile = fileNames[0];
+                    let selectedFile = fileNames[0];
+                    this.fileName = path.basename(selectedFile);
 
                     fs.readFile(selectedFile, 'utf-8', (err, data) => {
                         if(err) {
@@ -44,10 +49,29 @@
                             return;
                         }
 
-                        console.log(`file content is: ${data}`);
+                        //console.log(`file content is: ${data}`);
                         this.fileText = data;
                     })
                 });
+            },
+
+            saveFile() {
+                let defaultPath;
+                if(this.lastSelectedFolder) {
+                    defaultPath = path.resolve(this.lastSelectedFolder, path.basename(this.fileName));
+                }
+                else {
+                    defaultPath = path.resolve(electronRemote.app.getPath("desktop"), path.basename(this.fileName));
+                }
+                let selectedPath = dialog.showSaveDialog({defaultPath: defaultPath});
+                if(selectedPath) {
+                    this.lastSelectedFolder = path.dirname(selectedPath);
+                    fs.writeFile(selectedPath, this.fileText, (err) => {
+                        if(err) {
+                            console.log(err);
+                        }
+                    })
+                }
             },
 
             decryptText() {
