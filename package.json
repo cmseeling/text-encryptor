@@ -1,6 +1,6 @@
 {
   "name": "text-encryptor",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "cmseeling <cmseeling@gmail.com>",
   "description": "An electron app for encrypting text files",
   "license": null,

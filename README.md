@@ -2,6 +2,9 @@
 
 > An electron app for encrypting text files
 
+### Use at your own risk!
+I am not a security expert. This application was built to experiment with Electron and to have a better understanding of how the Node crypto package works. There may be security flaws within this program, and I take no responsibiilty if your data gets hacked because you used this application.
+
 #### Build Setup
 
 ``` bash

@@ -38,9 +38,19 @@
                 password: ''
             };
         },
+        computed: {
+            defaultFolder: function() {
+                if(this.lastSelectedFolder) {
+                    return this.lastSelectedFolder;
+                }
+                else {
+                    return electronRemote.app.getPath("desktop");
+                }
+            }
+        },
         methods: {
             openFile() {
-                dialog.showOpenDialog((fileNames) => {
+                dialog.showOpenDialog({defaultPath: this.defaultFolder}, (fileNames) => {
                     if(fileNames === undefined) {
                         console.log("no file selected");
                         return;
@@ -50,6 +60,7 @@
                     this.fileName = path.basename(selectedFile);
 
                     fs.readFile(selectedFile, 'utf-8', (err, data) => {
+                        this.lastSelectedFolder = path.dirname(selectedFile);
                         if(err) {
                             alert("An error ocurred reading the file :" + err.message);
                             return;
@@ -62,13 +73,7 @@
             },
 
             saveFile() {
-                let defaultPath;
-                if(this.lastSelectedFolder) {
-                    defaultPath = path.resolve(this.lastSelectedFolder, path.basename(this.fileName));
-                }
-                else {
-                    defaultPath = path.resolve(electronRemote.app.getPath("desktop"), path.basename(this.fileName));
-                }
+                let defaultPath = path.resolve(this.defaultFolder, path.basename(this.fileName));
                 let selectedPath = dialog.showSaveDialog({defaultPath: defaultPath});
                 if(selectedPath) {
                     this.lastSelectedFolder = path.dirname(selectedPath);
