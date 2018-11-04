@@ -10,6 +10,11 @@
                 <button @click="encryptText"><font-awesome-icon icon="lock"></font-awesome-icon> Encrypt Text</button>
             </div>
         </div>
+        <div class="password-container">
+            <label class="pc_label" for="password">Password: </label>
+            <input type="password" class="pc_input" id="password" v-model="password" />
+        </div>
+        <br />
         <div class="editor-container">
             <textarea class="editor" ref="editor" id="editor" v-model="fileText"></textarea>
         </div>
@@ -29,7 +34,8 @@
             return {
                 fileText: '',
                 fileName: 'new.txt',
-                lastSelectedFolder: ''
+                lastSelectedFolder: '',
+                password: ''
             };
         },
         methods: {
@@ -75,11 +81,21 @@
             },
 
             decryptText() {
-                this.fileText = Obfuscator.decrypt(this.fileText, "asdf");
+                if(this.password) {
+                    this.fileText = Obfuscator.decrypt(this.fileText, "asdf");
+                }
+                else {
+                    alert("Please enter the password for this file.");
+                }
             },
 
             encryptText() {
-                this.fileText = Obfuscator.encrypt(this.fileText, "asdf");
+                if(this.password) {
+                    this.fileText = Obfuscator.encrypt(this.fileText, "asdf");
+                }
+                else {
+                    alert("Please enter the password for this file.");
+                }
             }
         }
     }
@@ -103,6 +119,19 @@
 
     textarea {
         resize: none;
+    }
+
+    .password-container {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .pc_label {
+        flex-grow: 1
+    }
+
+    .pc_input {
+        flex-grow: 100;
     }
 
     .left {

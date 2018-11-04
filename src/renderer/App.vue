@@ -26,7 +26,7 @@
       },
       sizeStyle: function() {
         return {
-          height: `${this.height - 63}px`
+          height: `${this.height - 103}px`
         }
       }
     },
