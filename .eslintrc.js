@@ -8,7 +8,7 @@ module.exports = {
     browser: true,
     node: true
   },
-  //extends: 'standard',
+  extends: 'standard',
   globals: {
     __static: true
   },
@@ -16,6 +16,13 @@ module.exports = {
     'html'
   ],
   'rules': {
+    "space-before-function-paren": ["warn", "never"],
+    "keyword-spacing": ["error", {"before": true}],
+    "keyword-spacing": ["warn", {"after": false}],
+    "semi": ["error", "always"],
+    "brace-style": ["warn", "stroustrup"],
+    "indent": ["error", 4],
+    "quotes": ["warn", "single", {"allowTemplateLiterals": true}],
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await

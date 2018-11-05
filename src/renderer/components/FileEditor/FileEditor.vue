@@ -22,16 +22,16 @@
 </template>
 
 <script>
-    import fs from 'fs';
-    import path from 'path';
+    import fs from'fs';
+    import path from'path';
+    import{ Obfuscator } from'../../../services/Obfuscator';
     const electronRemote = require('electron').remote;
     const dialog = electronRemote.dialog;
-    import { Obfuscator } from '../../../services/Obfuscator';
 
     export default {
         name: 'file-editor',
         data: function() {
-            return {
+            return{
                 fileText: '',
                 fileName: 'new.txt',
                 lastSelectedFolder: '',
@@ -43,8 +43,8 @@
                 if(this.lastSelectedFolder) {
                     return this.lastSelectedFolder;
                 }
-                else {
-                    return electronRemote.app.getPath("desktop");
+                else{
+                    return electronRemote.app.getPath('desktop');
                 }
             }
         },
@@ -52,7 +52,7 @@
             openFile() {
                 dialog.showOpenDialog({defaultPath: this.defaultFolder}, (fileNames) => {
                     if(fileNames === undefined) {
-                        console.log("no file selected");
+                        console.log('no file selected');
                         return;
                     }
 
@@ -62,13 +62,13 @@
                     fs.readFile(selectedFile, 'utf-8', (err, data) => {
                         this.lastSelectedFolder = path.dirname(selectedFile);
                         if(err) {
-                            alert("An error ocurred reading the file :" + err.message);
+                            alert('An error ocurred reading the file :' + err.message);
                             return;
                         }
 
-                        //console.log(`file content is: ${data}`);
+                        // console.log(`file content is: ${data}`);
                         this.fileText = data;
-                    })
+                    });
                 });
             },
 
@@ -81,29 +81,29 @@
                         if(err) {
                             console.log(err);
                         }
-                    })
+                    });
                 }
             },
 
             decryptText() {
                 if(this.password) {
-                    this.fileText = Obfuscator.decrypt(this.fileText, "asdf");
+                    this.fileText = Obfuscator.decrypt(this.fileText, 'asdf');
                 }
-                else {
-                    alert("Please enter the password for this file.");
+                else{
+                    alert('Please enter the password for this file.');
                 }
             },
 
             encryptText() {
                 if(this.password) {
-                    this.fileText = Obfuscator.encrypt(this.fileText, "asdf");
+                    this.fileText = Obfuscator.encrypt(this.fileText, 'asdf');
                 }
-                else {
-                    alert("Please enter the password for this file.");
+                else{
+                    alert('Please enter the password for this file.');
                 }
             }
         }
-    }
+    };
 </script>
 
 <style>
